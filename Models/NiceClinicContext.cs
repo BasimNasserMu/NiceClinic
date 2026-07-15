@@ -6,9 +6,13 @@ namespace NiceClinic.Models
 {
     public class NiceClinicContext : IdentityDbContext<AppUser>
     {
+        public DbSet<Doctor> Doctors { get; set; }
+        public DbSet<Patient> Patients { get; set; }
+        public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<VisitNote> VisitNotes { get; set; }
+        public DbSet<SystemSetting> SystemSettings { get; set; }
         public NiceClinicContext(DbContextOptions<NiceClinicContext> options) : base(options)
         {
-
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
