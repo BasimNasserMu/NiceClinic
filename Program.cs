@@ -1,4 +1,26 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using NiceClinic.Models;
+
 var builder = WebApplication.CreateBuilder(args);
+
+
+
+var connStr = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<NiceClinicContext>(options => options.UseSqlServer(connStr));
+
+
+builder.Services.AddIdentity<AppUser, IdentityRole>(options => {
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequiredLength = 12;
+}).AddEntityFrameworkStores<NiceClinicContext>()
+.AddDefaultTokenProviders();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/Login";
+    options.AccessDeniedPath = "/Account/AccessDenied";
+});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -18,6 +40,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
